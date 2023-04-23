@@ -1,0 +1,9 @@
+{
+    "name": "tiny-production-ui",
+    "version": "1.0.0",
+    "title": "Tiny Production UI",
+    "author": "janisvepris",
+    "factorio_version": "1.1",
+    "dependencies": ["base >= 1.1"],
+    "description": "This mod adds UI that lets you see you production rates for selected items while you play the game."
+}

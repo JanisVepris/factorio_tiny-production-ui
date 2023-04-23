@@ -1,4 +1,6 @@
-#Tiny Production UI
+# Tiny Production UI
+
+![image](https://user-images.githubusercontent.com/4033838/233856607-c099277f-64af-4b69-a5ac-b511f594958c.png)
 
 Adds a small UI element that lets you select certain items and see production/consumption rates for those items.
 

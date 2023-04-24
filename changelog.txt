@@ -3,3 +3,9 @@ Version: 1.0.0
 Date: 2023-04-23
   Changes:
     - Initial release
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023-04-24
+  Changes:
+    - Fix game a crashing bug when turning the mod at runtime
+    - Fix numbers overlapping layout issue

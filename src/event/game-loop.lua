@@ -70,6 +70,8 @@ end
 
 function tpu.e.loop.handler.on_nth_tick(event)
     for _, player in pairs(game.players) do
+        if not tpu.util.pcfg(player, "tpu-enabled") then return end
+
         tpu.f.production.update_production_rates(player)
     end
 end

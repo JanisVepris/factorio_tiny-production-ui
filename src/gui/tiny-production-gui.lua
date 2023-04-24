@@ -214,7 +214,8 @@ function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
             direction = "vertical",
         }
 
-        label_container.style.padding = 0
+        label_container.style.left_padding = 5
+        label_container.style.right_padding = 5
         label_container.style.vertical_align = "top"
         label_container.style.horizontal_align = "right"
 
@@ -222,27 +223,25 @@ function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
             type = "label",
             name = "tpu_slot_rate_output_" .. i,
             tooltip = "tpu.output-caption",
-            style = "electric_usage_label",
+            style = "bold_label",
         }
 
         local input = label_container.add {
             type = "label",
             name = "tpu_slot_rate_input_" .. i,
             tooltip = "tpu.input-caption",
-            style = "electric_usage_label",
+            style = "bold_label",
         }
 
         output.style.horizontal_align = "right"
         output.style.vertical_align = "top"
         output.style.padding = 0
         output.style.margin = 0
-        output.style.height = 1
 
         input.style.horizontal_align = "right"
         input.style.vertical_align = "top"
         input.style.padding = 0
         input.style.margin = 0
-        input.style.height = 1
 
         output.style.font_color = {r = 0.3, g = 1, b = 0.3}
         input.style.font_color = {r = 1, g = 0.3, b = 0.3}

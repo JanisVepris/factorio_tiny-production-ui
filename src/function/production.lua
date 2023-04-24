@@ -11,6 +11,8 @@ end
 function tpu.f.production.update_production_rate(player, index)
     local container = tpu.util.get_slot_container(player)
 
+    if not container then return end
+
     local slot = container["tpu_slot_" .. index]
 
     local item_name = slot.elem_value

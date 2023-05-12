@@ -9,3 +9,10 @@ Date: 2023-04-24
   Changes:
     - Fix game a crashing bug when turning the mod at runtime
     - Fix numbers overlapping layout issue
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2023-05-13
+  Changes:
+    - Better, more consistent GUI
+    - Now showing two digits after the decimal point
+    - New button to toggle between total production/consumption rate display and a production-consumption difference display

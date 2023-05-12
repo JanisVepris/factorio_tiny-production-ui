@@ -31,6 +31,26 @@ function tpu.g.set_slot_count(player, slot_count)
     global['slot_count'] = slot_count
 end
 
+function tpu.g.toggle_display_mode(player)
+    local global = tpu.g.get_global(player)
+
+    if not global['display_mode'] then global['display_mode'] = tpu.global_defaults.display_mode end
+
+    if global['display_mode'] == tpu.defines.gui.display_mode.totals then
+        global['display_mode'] = tpu.defines.gui.display_mode.diff
+    elseif global['display_mode'] == tpu.defines.gui.display_mode.diff then
+        global['display_mode'] = tpu.defines.gui.display_mode.totals
+    end
+end
+
+function tpu.g.get_display_mode(player)
+    local global = tpu.g.get_global(player)
+
+    if not global['display_mode'] then global['display_mode'] = tpu.global_defaults.display_mode end
+
+    return global['display_mode']
+end
+
 function tpu.g.get_rate_precision(player)
     local global = tpu.g.get_global(player)
 

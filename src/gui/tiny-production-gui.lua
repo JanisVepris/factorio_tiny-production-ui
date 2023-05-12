@@ -12,50 +12,9 @@ function tpu.gui.add_gui_layout(player)
         style = "quick_bar_window_frame"
     }
 
-    local titlebar = frame.add{
-        type = "flow",
-        name = "tpu_ui_titlebar",
-        direction = tpu.g.get_gui_orientation(player),
-    }
+    local titlebar = tpu.gui.c.titlebar(frame)
 
-    titlebar.drag_target = frame
-
-    local titlebar_flow = titlebar.add{
-        type = "flow",
-        name = "tpu_ui_titlebar_flow",
-        direction = "horizontal",
-        ignored_by_interaction = true,
-    }
-
-    titlebar_flow.add{
-        type = "label",
-        name = "tpu_ui_titlebar_label",
-        style = "caption_label",
-        caption = {"tpu.titlebar"},
-        ignored_by_interaction = true,
-    }
-
-    titlebar_flow.add{
-        type = "label",
-        name = "tpu_ui_titlebar_precision",
-        caption = "",
-        ignored_by_interaction = true,
-    }
-
-    local spacer = titlebar.add{
-        type = "empty-widget"
-    }
-
-    spacer.style.width = 20
-
-    local control_bar = titlebar.add {
-        type = "flow",
-        direction = "horizontal",
-    }
-
-    control_bar.style.bottom_margin = 8
-
-    tpu.gui.add_control_buttons(control_bar, player)
+    tpu.gui.c.controlBar(titlebar, tpu.g.get_display_mode(player))
 
     local frameInner = frame.add{
         type = "frame",
@@ -87,54 +46,11 @@ function tpu.gui.add_gui_layout(player)
 
     table.style.vertical_spacing = 3
 
+    -- tpu.gui.c.displayModeButton(flow, tpu.g.get_display_mode(player))
+
     tpu.util.set_precision_string(player, tpu.g.get_rate_precision(player))
 
     tpu.util.debug("Add GUI layout: DONE")
-end
-
-function tpu.gui.add_control_buttons(control_bar, player)
-    local orientation = tpu.g.get_gui_orientation(player)
-    local font_color = {r = 1, g = 1, b = 1}
-
-    local table_switch = control_bar.add{
-        type = "button",
-        name = "tpu_ui_slot_table_switch",
-        style = "frame_action_button",
-        caption = "⚫",
-        tooltip = {"tpu.visibility-toggle-tooltip"}
-    }
-
-    table_switch.style.font_color = font_color
-
-    local inc_slots_button = control_bar.add{
-        type = "button",
-        name = "tpu_ui_inc_slots_button",
-        style = "frame_action_button",
-        caption = "+",
-        tooltip = {"tpu.inc-slots-button"}
-    }
-
-    inc_slots_button.style.font_color = font_color
-
-    local dec_slots_button = control_bar.add{
-        type = "button",
-        name = "tpu_ui_dec_slots_button",
-        style = "frame_action_button",
-        caption = "-",
-        tooltip = {"tpu.dec-slots-button"}
-    }
-
-    dec_slots_button.style.font_color = font_color
-
-    local toggle_precision_button = control_bar.add{
-        type = "button",
-        name = "tpu_ui_toggle_precision_button",
-        style = "frame_action_button",
-        caption = "☵",
-        tooltip = {"tpu.toggle-time-period-tooltip"},
-    }
-
-    toggle_precision_button.style.font_color = font_color
 end
 
 function tpu.gui.add_slots(player)
@@ -143,69 +59,20 @@ function tpu.gui.add_slots(player)
     local slot_count = tpu.g.get_slot_count(player)
     local container = tpu.util.get_slot_container(player)
 
-    local elem_filters = {}
-
-    local orientation = tpu.g.get_gui_orientation(player)
-
-    tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
-
-    tpu.util.debug("Adding slots: DONE")
-end
-
-function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
     for i = 1, slot_count, 1
     do
-        local slot_button = container.add {
-            name = "tpu_slot_" .. i,
-            type = "choose-elem-button",
-            elem_type = "item",
-            style = "quick_bar_slot_button",
-            elem_filters = elem_filters,
-        }
+        tpu.gui.c.slot(container, "tpu_slot_" .. i)
 
-        slot_button.style.height = 42
-        slot_button.style.width = 42
+        local display_mode = tpu.g.get_display_mode(player)
 
-        local label_container_outer = container.add {
-            type="flow",
-            name="tpu_slot_rate_container_outer_" .. i,
-            direction="horizontal",
-        }
-
-        local spacer = label_container_outer.add {
-            type="empty-widget"
-        }
-
-        spacer.style.horizontally_stretchable = "on"
-
-        local label_container = label_container_outer.add{
-            type="flow",
-            name = "tpu_slot_rate_container_" .. i,
-            direction = "vertical",
-        }
-
-        label_container.style.left_padding = 0
-        label_container.style.right_padding = 2
-        label_container.style.vertical_align = "top"
-        label_container.style.horizontal_align = "right"
-
-        local output = label_container.add {
-            type = "label",
-            name = "tpu_slot_rate_output_" .. i,
-            tooltip = "tpu.output-caption",
-            style = "bold_label",
-        }
-
-        local input = label_container.add {
-            type = "label",
-            name = "tpu_slot_rate_input_" .. i,
-            tooltip = "tpu.input-caption",
-            style = "bold_label",
-        }
-
-        output.style.font_color = {r = 0.3, g = 1, b = 0.3}
-        input.style.font_color = {r = 1, g = 0.3, b = 0.3}
+        if display_mode == tpu.defines.gui.display_mode.totals then
+            tpu.gui.c.totalsLabels(container, i)
+        elseif display_mode == tpu.defines.gui.display_mode.diff then
+            tpu.gui.c.differenceLabel(container, i)
+        end
     end
+
+    tpu.util.debug("Adding slots: DONE")
 end
 
 function tpu.gui.initialize_player_gui(player)

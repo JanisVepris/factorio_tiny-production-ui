@@ -21,6 +21,7 @@ tpu = {
         gui_orientation = "vertical",
         slot_count = 4,
         rate_precision = defines.flow_precision_index.ten_minutes,
+        display_mode = "totals",
     },
     defines = {
         gui ={
@@ -28,6 +29,10 @@ tpu = {
                 vertical = "vertical",
                 horizontal = "horizontal",
             },
+            display_mode = {
+                diff = "diff",
+                totals = "totals",
+            }
         },
         max_slot_count = 15,
         min_slot_count = 1,
@@ -40,6 +45,7 @@ require("src/util/format-number")
 require("src/util/debug")
 require("src/util/cfg")
 require("src/util/slot-container")
+require("src/util/slot-label-container")
 require("src/util/gui-base")
 require("src/util/precision-string")
 require("src/util/global")
@@ -48,6 +54,7 @@ require("src/util/global")
 require("src/function/production.lua")
 
 -- gui
+require("src/gui/gui-components")
 require("src/gui/tiny-production-gui")
 
 --event

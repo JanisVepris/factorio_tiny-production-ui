@@ -12,8 +12,17 @@
 -- end
 
 
-function tpu.util.format_number(number)
-    if number < 1000 then return tostring(number) end
+function tpu.util.format_number(originalNumber)
+
+    local isNumberNegative = originalNumber < 0
+
+    local number = originalNumber
+
+    if isNumberNegative then
+        number = number * -1
+    end
+
+    if number < 1000 then return tostring(originalNumber) end
 
     local num = 0.0
     local suffix = ""
@@ -32,5 +41,9 @@ function tpu.util.format_number(number)
         suffix = "T"
     end
 
-    return string.format("%.1f", num) .. suffix
+    if isNumberNegative then
+        num = num * -1
+    end
+
+    return string.format("%.2f", num) .. suffix
 end

@@ -106,21 +106,6 @@ function tpu.gui.add_control_buttons(control_bar, player)
 
     table_switch.style.font_color = font_color
 
-    -- local orientation_switch = control_bar.add{
-    --     type = "button",
-    --     name = "tpu_ui_orientation_switch",
-    --     style = "frame_action_button",
-    --     tooltip = {"tpu.orientation-switch-tooltip"}
-    -- }
-
-    -- orientation_switch.style.font_color = font_color
-
-    -- if orientation == tpu.defines.gui.orientation.horizontal then
-    --     orientation_switch.caption = "↔"
-    -- elseif orientation == tpu.defines.gui.orientation.vertical then
-    --     orientation_switch.caption = "↕"
-    -- end
-
     local inc_slots_button = control_bar.add{
         type = "button",
         name = "tpu_ui_inc_slots_button",
@@ -162,36 +147,9 @@ function tpu.gui.add_slots(player)
 
     local orientation = tpu.g.get_gui_orientation(player)
 
-    if orientation == tpu.defines.gui.orientation.vertical
-    then
-        tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
-    elseif orientation == tpu.defines.gui.orientation.horizontal
-    then
-        tpu.gui.add_slots_horizontal(container, slot_count, elem_filters)
-    end
+    tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
 
     tpu.util.debug("Adding slots: DONE")
-end
-
-function tpu.gui.add_slots_horizontal(container, slot_count, elem_filters)
-    for i = 1, slot_count, 1
-    do
-        container.add {
-            name = "tpu_slot_" .. i,
-            type = "choose-elem-button",
-            elem_type = "item",
-            style = "quick_bar_slot_button",
-            elem_filters = elem_filters,
-        }
-    end
-
-    for i = 1, slot_count, 1
-    do
-        container.add {
-            type = "label",
-            name = "tpu_slot_rate_" .. i,
-        }
-    end
 end
 
 function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
@@ -208,14 +166,26 @@ function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
         slot_button.style.height = 42
         slot_button.style.width = 42
 
-        local label_container = container.add{
+        local label_container_outer = container.add {
+            type="flow",
+            name="tpu_slot_rate_container_outer_" .. i,
+            direction="horizontal",
+        }
+
+        local spacer = label_container_outer.add {
+            type="empty-widget"
+        }
+
+        spacer.style.horizontally_stretchable = "on"
+
+        local label_container = label_container_outer.add{
             type="flow",
             name = "tpu_slot_rate_container_" .. i,
             direction = "vertical",
         }
 
-        label_container.style.left_padding = 5
-        label_container.style.right_padding = 5
+        label_container.style.left_padding = 0
+        label_container.style.right_padding = 2
         label_container.style.vertical_align = "top"
         label_container.style.horizontal_align = "right"
 
@@ -232,16 +202,6 @@ function tpu.gui.add_slots_vertical(container, slot_count, elem_filters)
             tooltip = "tpu.input-caption",
             style = "bold_label",
         }
-
-        output.style.horizontal_align = "right"
-        output.style.vertical_align = "top"
-        output.style.padding = 0
-        output.style.margin = 0
-
-        input.style.horizontal_align = "right"
-        input.style.vertical_align = "top"
-        input.style.padding = 0
-        input.style.margin = 0
 
         output.style.font_color = {r = 0.3, g = 1, b = 0.3}
         input.style.font_color = {r = 1, g = 0.3, b = 0.3}

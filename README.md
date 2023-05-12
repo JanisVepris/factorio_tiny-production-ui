@@ -1,6 +1,6 @@
 # Tiny Production UI
 
-![image](https://user-images.githubusercontent.com/4033838/233856607-c099277f-64af-4b69-a5ac-b511f594958c.png)
+![totals](https://github.com/JanisVepris/factorio_tiny-production-ui/assets/4033838/58d5c09c-464c-4e78-afae-a9278ed984e7)
 
 Adds a small UI element that lets you select certain items and see production/consumption rates for those items.
 

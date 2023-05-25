@@ -1,21 +1,19 @@
 if not global.tpu_tpu then global.tpu_tpu = {} end
 
 tpu = {
-    state = {
-        dirty = true
-    },
+    version = "1.1.1",
     conf = {
-        debug = true,
+        debug = false,
         log_prefix = "TPU",
         log_format = {
             comment = false,
             numformat = '%1.8g'
         },
     },
-    e = {},
-    util = {},
-    f = {},
-    gui = {},
+    e = {}, -- event handlers
+    util = {}, -- utilities
+    f = {}, -- functions
+    gui = {}, -- gui tools
     g = {}, -- global var utils
     global_defaults = {
         gui_orientation = "vertical",

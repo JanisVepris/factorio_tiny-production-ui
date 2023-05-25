@@ -53,17 +53,21 @@ function tpu.e.loop.handler.on_player_created(event)
 end
 
 function tpu.e.loop.handler.on_tick()
-    if tpu.state.dirty == false then return end
-
     if not global.tpu_tpu then global.tpu_tpu = {} end
 
     tpu.util.debug("TICK EVENT START")
 
     for _, player in pairs(game.players) do
-        tpu.gui.refresh_gui(player)
-    end
 
-    tpu.state.dirty = false
+        local version = tpu.g.get_version(player)
+
+        if version ~= tpu.version then
+            tpu.util.debug("Tick event for player: " .. player.name)
+            tpu.gui.refresh_gui(player)
+            tpu.g.set_version(player, tpu.version)
+        end
+
+    end
 
     tpu.util.debug("TICK EVENT END", true)
 end

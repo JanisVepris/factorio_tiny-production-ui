@@ -3,6 +3,22 @@ function tpu.g.get_global(player)
     return global.tpu_tpu[player.name]
 end
 
+function tpu.g.get_version(player)
+    local global = tpu.g.get_global(player)
+
+    if not global['version'] then global['version'] = 'fresh' end
+
+    return global['version']
+end
+
+function tpu.g.set_version(player, version)
+    local global = tpu.g.get_global(player)
+
+    if not global['version'] then global['version'] = 'fresh' end
+
+    global['version'] = version
+end
+
 function tpu.g.get_gui_orientation(player)
     local global = tpu.g.get_global(player)
 

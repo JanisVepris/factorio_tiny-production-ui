@@ -16,3 +16,8 @@ Date: 2023-05-13
     - Better, more consistent GUI
     - Now showing two digits after the decimal point
     - New button to toggle between total production/consumption rate display and a production-consumption difference display
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2023-05-25
+  Changes:
+    - Fix a multiplayer desync causing issue

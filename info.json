@@ -5,5 +5,5 @@
     "author": "janisvepris",
     "factorio_version": "2.1",
     "dependencies": ["base >= 2.1"],
-    "description": "This mod adds UI that lets you see you production rates for selected items while you play the game."
+    "description": "This mod adds a clean, small UI window that lets you see you production rates for selected items while you play the game. Toggle it from your shortcut bar or set a keyboard shortcut."
 }

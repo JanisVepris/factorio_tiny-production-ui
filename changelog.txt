@@ -21,3 +21,17 @@ Version: 1.1.1
 Date: 2023-05-25
   Changes:
     - Fix a multiplayer desync causing issue
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-10-28
+  Changes:
+    - Full code rewrite - better, faster, stronger
+    - Factorio 2.1 support
+    - Cleaner UI elements
+    - Space age support
+    - Added support for all rate intervals (5s to 1000h)
+    - Clearer button icons
+    - Added shortcut bar button for toggling the window on/off
+    - Added a configurable keyboard shortcut for toggling the windown on/off (unset by default)
+    - Max columns/rows is now set at 100. Should be enough slots for everyone's needs
+    - Added a planet selector that allows seeing stats for the selected planet only

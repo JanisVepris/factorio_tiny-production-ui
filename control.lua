@@ -1,63 +1,21 @@
-if not global.tpu_tpu then global.tpu_tpu = {} end
+local Gui = require("src.gui")
+local GuiEvents = require("src.gui_events")
+local State = require("src.state")
+local Const = require("src.constants")
 
-tpu = {
-    version = "1.1.1",
-    conf = {
-        debug = false,
-        log_prefix = "TPU",
-        log_format = {
-            comment = false,
-            numformat = '%1.8g'
-        },
-    },
-    e = {}, -- event handlers
-    util = {}, -- utilities
-    f = {}, -- functions
-    gui = {}, -- gui tools
-    g = {}, -- global var utils
-    global_defaults = {
-        gui_orientation = "vertical",
-        slot_count = 4,
-        rate_precision = defines.flow_precision_index.ten_minutes,
-        display_mode = "totals",
-    },
-    defines = {
-        gui ={
-            orientation = {
-                vertical = "vertical",
-                horizontal = "horizontal",
-            },
-            display_mode = {
-                diff = "diff",
-                totals = "totals",
-            }
-        },
-        max_slot_count = 15,
-        min_slot_count = 1,
-        number_format_suffix = {"K","M","B","T","q","Q","s","S","O","N","d","U","D"},
-    },
-}
+---@diagnostic disable-next-line
+if Const.DEBUG and script.active_mods["gvv"] then
+	---@diagnostic disable-next-line
+	require("__gvv__.gvv")()
+end
 
--- utils
-require("src/util/format-number")
-require("src/util/debug")
-require("src/util/cfg")
-require("src/util/slot-container")
-require("src/util/slot-label-container")
-require("src/util/gui-base")
-require("src/util/precision-string")
-require("src/util/global")
+script.on_init(function()
+	State.init()
+end)
 
--- functions
-require("src/function/production.lua")
+script.on_configuration_changed(function()
+	State.init()
+end)
 
--- gui
-require("src/gui/gui-components")
-require("src/gui/tiny-production-gui")
-
---event
-require("src/event/game-loop")
-require("src/event/gui-event")
-
-tpu.e.loop.init()
-tpu.e.gui.init()
+GuiEvents.init()
+Gui.init()

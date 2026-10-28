@@ -1,10 +1,5 @@
 # Tiny Production UI
 
-![totals](https://github.com/JanisVepris/factorio_tiny-production-ui/assets/4033838/58d5c09c-464c-4e78-afae-a9278ed984e7)
+<img width="655" height="553" alt="screenshot 1" src="https://github.com/user-attachments/assets/7b003cfc-f768-43a7-a1eb-2ceda7e99719" />
 
 Adds a small UI element that lets you select certain items and see production/consumption rates for those items.
-
-It allows you to have up to 15 slots and see production/consumption rates for 5s, 1m, 10m, 1h and 10h intervals.
-
-The UI element is freely draggable across your screen.
-You can also minimize and expand it at any point.

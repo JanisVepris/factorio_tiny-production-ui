@@ -35,6 +35,9 @@ local rate_precisions = {
 
 function State.init()
 	storage.players = storage.players or {}
+	for player_index in pairs(storage.players) do
+		State.migrate(player_index)
+	end
 end
 
 ---@param player_index integer
@@ -49,10 +52,9 @@ function State.get(player_index)
 	return players[player_index]
 end
 
----@param player_index integer
 ---@return PlayerState
-function State.default(player_index)
-	local state = {
+local function defaults()
+	return {
 		orientation = Const.DEFAULTS.ORIENTATION,
 		mode = Const.DEFAULTS.MODE,
 		unit = Const.DEFAULTS.UNIT,
@@ -64,10 +66,25 @@ function State.default(player_index)
 		paused = false,
 		action_buttons_visible = true,
 	}
+end
 
+---@param player_index integer
+---@return PlayerState
+function State.default(player_index)
+	local state = defaults()
 	storage.players[player_index] = state
 
 	return State.get(player_index)
+end
+
+-- Add new defaults without replacing a player's existing selections/settings.
+function State.migrate(player_index)
+	local player_state = State.get(player_index)
+	for key, value in pairs(defaults()) do
+		if player_state[key] == nil then
+			player_state[key] = value
+		end
+	end
 end
 
 ---@param player_index integer
@@ -259,8 +276,7 @@ function State.selectSlotForMove(player_index, idx)
 	return false
 end
 
--- Insert the source at the destination, shifting intervening slots in order.
--- Copy both sparse tables together so empty slots and fluid types are preserved.
+-- Swap both values and types, including empty slots.
 function State.moveSlot(player_index, source, destination)
 	local player_state = State.get(player_index)
 	local count = player_state.rows * player_state.columns
@@ -268,16 +284,12 @@ function State.moveSlot(player_index, source, destination)
 		or source % 1 ~= 0 or destination % 1 ~= 0 or not player_state.slots[source] then
 		return false
 	end
-	local value = player_state.slots[source]
-	local slot_type = State.getSlotType(player_index, source)
+	local source_type = State.getSlotType(player_index, source)
+	local destination_type = State.getSlotType(player_index, destination)
 	player_state.slot_types = player_state.slot_types or {}
-	local step = source < destination and 1 or -1
-	for idx = source, destination - step, step do
-		player_state.slots[idx] = player_state.slots[idx + step]
-		player_state.slot_types[idx] = State.getSlotType(player_index, idx + step)
-	end
-	player_state.slots[destination] = value
-	player_state.slot_types[destination] = slot_type
+	player_state.slots[source], player_state.slots[destination] =
+		player_state.slots[destination], player_state.slots[source]
+	player_state.slot_types[source], player_state.slot_types[destination] = destination_type, source_type
 	State.cancelSlotMove(player_index)
 	return true
 end

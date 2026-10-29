@@ -28,6 +28,7 @@ function MainWindow.toggle(player)
 		player.gui.screen,
 		Gui.frame({
 			name = Const.UI_ID.MAIN_WINDOW_OUTER,
+			tags = { tpu_gui_schema = Const.GUI_SCHEMA_VERSION },
 			direction = state.getOrientation(player.index),
 			style_mods = {
 				padding = 0,
@@ -59,15 +60,43 @@ function MainWindow.toggle(player)
 	TitleBar.setDragTarget(outer[Const.UI_ID.TITLE_BAR_CONTAINER], outer)
 end
 
-function MainWindow.refresh(player)
-	local _, window = Gui.getMainWindow(player)
+function MainWindow.rebuild(player)
+	state.migrate(player.index)
+	state.cancelSlotMove(player.index)
+	local window = Gui.getMainWindowRoot(player)
 	if not window then
 		return
 	end
 
-	MainWindow.toggle(player)
+	local location = window.location
+	if location then
+		state.get(player.index).window_location = { x = location.x, y = location.y }
+	end
+	window.destroy()
 	MainWindow.toggle(player)
 	MainWindow.updateSlots(player)
+end
+
+function MainWindow.rebuildAll()
+	for _, player in pairs(game.players) do
+		MainWindow.rebuild(player)
+	end
+end
+
+-- False means the old GUI was replaced; discard events targeting its elements.
+function MainWindow.ensureCurrent(player)
+	local root = Gui.getMainWindowRoot(player)
+	if root and (root.name ~= Const.UI_ID.MAIN_WINDOW_OUTER
+		or root.tags.tpu_gui_schema ~= Const.GUI_SCHEMA_VERSION
+		or not root[Const.UI_ID.MAIN_WINDOW]) then
+		MainWindow.rebuild(player)
+		return false
+	end
+	return true
+end
+
+function MainWindow.refresh(player)
+	MainWindow.rebuild(player)
 end
 
 function MainWindow.updateActionButtonsVisibility(player)
@@ -80,6 +109,9 @@ function MainWindow.updateActionButtonsVisibility(player)
 end
 
 function MainWindow.updateSlots(player)
+	if not MainWindow.ensureCurrent(player) then
+		return
+	end
 	local window = Gui.getMainWindow(player)
 	if not window then
 		return

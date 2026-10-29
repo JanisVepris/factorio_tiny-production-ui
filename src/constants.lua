@@ -1,5 +1,7 @@
 return {
 	DEBUG = true,
+	-- Increment when changing the saved GUI structure or event bindings.
+	GUI_SCHEMA_VERSION = 1,
 	TOGGLE_WINDOW_INPUT = "tpu-toggle-window",
 
 	TICK_INTERVAL = 5,

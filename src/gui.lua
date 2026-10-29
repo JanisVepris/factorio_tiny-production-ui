@@ -3,14 +3,25 @@ local Const = require("src.constants")
 local Gui = {}
 
 local handlers = {}
+local event_guard
+
+-- Also recognize saves from before the screen-level wrapper was introduced.
+function Gui.getMainWindowRoot(player)
+	local screen = player.gui.screen
+	local root = screen[Const.UI_ID.MAIN_WINDOW_OUTER] or screen[Const.UI_ID.MAIN_WINDOW]
+	return root and root.valid and root or nil
+end
 
 ---@param player LuaPlayer
 ---@return LuaGuiElement? window Inner content flow.
 ---@return LuaGuiElement? outer Screen-level frame.
 function Gui.getMainWindow(player)
-	local outer = player.gui.screen[Const.UI_ID.MAIN_WINDOW_OUTER]
-	if not outer or not outer.valid then
+	local outer = Gui.getMainWindowRoot(player)
+	if not outer then
 		return nil, nil
+	end
+	if outer.name == Const.UI_ID.MAIN_WINDOW then
+		return outer, outer
 	end
 
 	local window = outer[Const.UI_ID.MAIN_WINDOW]
@@ -33,6 +44,10 @@ function Gui.register(name, callback)
 	handlers[name] = callback
 end
 
+function Gui.setEventGuard(callback)
+	event_guard = callback
+end
+
 function Gui.dispatch(event)
 	if not event.element or not event.element.valid then
 		return
@@ -48,6 +63,9 @@ function Gui.dispatch(event)
 	local handler = handlers[action]
 
 	if handler then
+		if event_guard and not event_guard(event) then
+			return
+		end
 		handler(event)
 	end
 end

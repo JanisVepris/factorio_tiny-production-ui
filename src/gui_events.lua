@@ -24,6 +24,11 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.setEventGuard(function(event)
+		local player = game.get_player(event.player_index)
+		return player and MainWindow.ensureCurrent(player)
+	end)
+
 	Gui.register(Action.REORDER_SLOT, function(event)
 		if event.button and event.button ~= defines.mouse_button_type.left then
 			return
@@ -75,6 +80,9 @@ function GuiEvents.init()
 		local player = game.get_player(event.player_index)
 		local idx = idx_from_name(element.name)
 		if not player or not idx then
+			return
+		end
+		if not MainWindow.ensureCurrent(player) then
 			return
 		end
 		local slot_type = element.switch_state == "right" and "fluid" or "item"
@@ -131,6 +139,9 @@ function GuiEvents.init()
 		end
 
 		-- planet chooser
+		if not MainWindow.ensureCurrent(player) then
+			return
+		end
 		if is_tpu_planet_chooser(element.name) then
 			snitch({ msg = "Planet chooser event", val = element.elem_value })
 			State.setPlanet(player.index, element.elem_value)
@@ -162,7 +173,7 @@ function GuiEvents.init()
 	-- Update rate labels
 	script.on_nth_tick(Const.TICK_INTERVAL, function()
 		for _, player in pairs(game.connected_players) do
-			if not State.isPaused(player.index) then
+			if MainWindow.ensureCurrent(player) and not State.isPaused(player.index) then
 				MainWindow.updateSlots(player)
 			end
 		end

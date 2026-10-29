@@ -39,5 +39,6 @@ Date: 2026-10-28
 Version: 2.1.0
 Date: 2026-10-29
   Changes:
-    - Add a unit selector. Now you can switch the production rates between units/stacks.
     - Fluid support! Empty slots can now be toggled between item/fluid types.
+    - Add a unit selector. Now you can switch the production rates between units/stacks.
+    - Add a Pause/Play button allowing you to temporarily pause the rates at their current values

@@ -24,6 +24,20 @@ end
 data:extend({
 	{
 		type = "sprite",
+		name = "tpu_pause_red",
+		filename = "__tiny-production-ui__/img/pause-red.png",
+		width = 32,
+		height = 32,
+	},
+	{
+		type = "sprite",
+		name = "tpu_play_green",
+		filename = "__tiny-production-ui__/img/play-green.png",
+		width = 32,
+		height = 32,
+	},
+	{
+		type = "sprite",
 		name = "tpu_unit_items",
 		filename = "__tiny-production-ui__/img/unit-items.png",
 		width = 32,

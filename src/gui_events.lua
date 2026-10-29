@@ -8,6 +8,7 @@ local ToggleRatePrecisionButton = require("src.ui.components.toggle_rate_precisi
 local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
 local UnitSelector = require("src.ui.components.unit_selector")
+local PauseButton = require("src.ui.components.pause_button")
 local is_tpu_slot_chooser = require("src.util.is_tpu_slot_chooser")
 local idx_from_name = require("src.util.idx_from_name")
 local is_tpu_planet_chooser = require("src.util.is_tpu_planet_chooser")
@@ -23,6 +24,18 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.register(Action.TOGGLE_PAUSE, function(event)
+		local player = game.get_player(event.player_index)
+		if not player then
+			return
+		end
+		local paused = State.togglePause(player.index)
+		PauseButton.update(event.element, player)
+		if not paused then
+			MainWindow.updateSlots(player)
+		end
+	end)
+
 	script.on_event(defines.events.on_gui_switch_state_changed, function(event)
 		local element = event.element
 		local prefix = Const.UI_ID.SLOT_TYPE_SWITCH
@@ -113,7 +126,9 @@ function GuiEvents.init()
 	-- Update rate labels
 	script.on_nth_tick(Const.TICK_INTERVAL, function()
 		for _, player in pairs(game.connected_players) do
-			MainWindow.updateSlots(player)
+			if not State.isPaused(player.index) then
+				MainWindow.updateSlots(player)
+			end
 		end
 	end)
 

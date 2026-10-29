@@ -11,6 +11,7 @@ local ToggleRatePrecisionButton = require("src.ui.components.toggle_rate_precisi
 local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
 local UnitSelector = require("src.ui.components.unit_selector")
+local PauseButton = require("src.ui.components.pause_button")
 
 local ActionButtons = {}
 
@@ -57,6 +58,8 @@ local function dimension_buttons(player)
 end
 
 function ActionButtons.new(player)
+	local first_row = dimension_buttons(player)
+	first_row[#first_row + 1] = PauseButton.new(player)
 	return Gui.flow({
 		name = Const.UI_ID.ACTION_BTN_CONTAINER,
 		direction = direction(player),
@@ -65,7 +68,7 @@ function ActionButtons.new(player)
 			Gui.flow({
 				name = Const.UI_ID.ACTION_BTN_PART1,
 				direction = subdirection(player),
-				children = dimension_buttons(player),
+				children = first_row,
 			}),
 
 			Gui.flow({

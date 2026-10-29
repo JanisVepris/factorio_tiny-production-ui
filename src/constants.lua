@@ -34,6 +34,7 @@ return {
 		BTN_TOGGLE_RATE_PRECISION = "tpu_btn_toggle_rate_precision",
 		BTN_PLANET_SELECTOR = "tpu_btn_planet_selector",
 		BTN_UNIT_SELECTOR = "tpu_btn_unit_selector",
+		BTN_PAUSE = "tpu_btn_pause",
 
 		-- Slot table
 		SLOT_TABLE = "tpu_slot_table",

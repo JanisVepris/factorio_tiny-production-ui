@@ -16,6 +16,7 @@ local snitch = require("src.util.snitch")
 ---@field slot_types table<integer, string>?
 ---@field planet string?
 ---@field window_location GuiLocation?
+---@field paused boolean
 
 local State = {}
 
@@ -58,11 +59,24 @@ function State.default(player_index)
 		rate_precision = Const.DEFAULTS.RATE_PRECISION,
 		slots = {},
 		slot_types = {},
+		paused = false,
 	}
 
 	storage.players[player_index] = state
 
 	return State.get(player_index)
+end
+
+---@param player_index integer
+function State.isPaused(player_index)
+	return State.get(player_index).paused == true
+end
+
+---@param player_index integer
+function State.togglePause(player_index)
+	local paused = not State.isPaused(player_index)
+	State.get(player_index).paused = paused
+	return paused
 end
 
 ---@param player_index integer

@@ -2,6 +2,7 @@ local Const = require("src.constants")
 local Gui = require("src.gui")
 local State = require("src.state")
 local Units = require("src.units")
+local Action = require("src.actions")
 local SlotTypeSwitch = require("src.ui.components.slot_type_switch")
 local format_number = require("src.util.format_number")
 local get_production_stats = require("src.util.get_production_stats")
@@ -9,7 +10,20 @@ local get_production_stats = require("src.util.get_production_stats")
 local RateDisplay = {}
 
 local function tooltip(player, idx, key)
-	return { "tpu.rate-unit-tooltip", { key }, Units.name(State.getUnit(player.index), State.getSlotType(player.index, idx)) }
+	local source = State.getReorderSource(player.index)
+	local instruction = source == idx and "tpu.reorder-cancel"
+		or source and "tpu.reorder-destination" or "tpu.reorder-select"
+	return {
+		"tpu.reorder-tooltip",
+		{ "tpu.rate-unit-tooltip", { key }, Units.name(State.getUnit(player.index), State.getSlotType(player.index, idx)) },
+		{ instruction },
+	}
+end
+
+local function rateLabel(props, idx)
+	props.onClick = Action.REORDER_SLOT
+	props.tags = { slot_idx = idx }
+	return Gui.label(props)
 end
 
 local function color(value)
@@ -52,12 +66,25 @@ local function children(player, idx)
 	local item = State.get(player.index).slots[idx]
 
 	if not item then
+		if State.getReorderSource(player.index) then
+			return {
+				rateLabel({
+					caption = { "tpu.reorder-empty" },
+					tooltip = { "tpu.reorder-destination" },
+					style_mods = {
+						font = Const.RATE_FONT_STYLE,
+						font_color = { 1, 0.9, 0.5 },
+						top_padding = 10,
+					},
+				}, idx),
+			}
+		end
 		return { SlotTypeSwitch.new(player, idx) }
 	end
 
 	if State.get(player.index).mode == "total" then
 		return {
-			Gui.label({
+			rateLabel({
 				name = Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx,
 				caption = { "tpu.not-available" },
 				tooltip = tooltip(player, idx, "tpu.production-tooltip"),
@@ -66,8 +93,8 @@ local function children(player, idx)
 					font = Const.RATE_FONT_STYLE,
 					padding = 0,
 				},
-			}),
-			Gui.label({
+			}, idx),
+			rateLabel({
 				name = Const.UI_ID.RATE_TOTAL_CONSUMPTION .. idx,
 				caption = { "tpu.not-available" },
 				tooltip = tooltip(player, idx, "tpu.consumption-tooltip"),
@@ -76,12 +103,12 @@ local function children(player, idx)
 					font = Const.RATE_FONT_STYLE,
 					padding = 0,
 				},
-			}),
+			}, idx),
 		}
 	end
 
 	return {
-		Gui.label({
+		rateLabel({
 			name = Const.UI_ID.RATE_DIFF .. idx,
 			caption = { "tpu.not-available" },
 			tooltip = tooltip(player, idx, "tpu.diff-tooltip"),
@@ -91,7 +118,7 @@ local function children(player, idx)
 				padding = 0,
 				top_padding = 10,
 			},
-		}),
+		}, idx),
 	}
 end
 

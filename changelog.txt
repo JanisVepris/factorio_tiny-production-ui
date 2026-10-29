@@ -38,9 +38,18 @@ Date: 2026-10-28
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-10-29
-  Changes:
+  Features:
     - Fluid support! Empty slots can now be toggled between item/fluid types.
-    - Add a unit selector. Now you can switch the production rates between units/stacks.
-    - Add a Pause/Play button allowing you to temporarily pause the rates at their current values.
-    - Move the window drag handle to the left side in horizontal mode. Makes more sense, loks better.
+    - Added a unit selector. Now you can switch the production rates between units/stacks.
+    - Added a Pause/Play button allowing you to temporarily pause the rates at their current values.
     - Add the ability to toggle buttons on/off for a truly minimal UI.
+  Changes:
+    - Moved the window drag handle to the left side in horizontal mode. Makes more sense, loks better.
+
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-10-30
+  Features:
+    - You can now click on slot text and then click on another slot's text to switch them, making reordering your table a bit easier
+  Changes:
+  Fixes:

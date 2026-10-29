@@ -14,6 +14,7 @@ function MainWindow.toggle(player)
 
 	if existing then
 		snitch("Toggle main window off")
+		state.cancelSlotMove(player.index)
 		local location = existing.location
 		state.get(player.index).window_location = { x = location.x, y = location.y }
 		existing.destroy()

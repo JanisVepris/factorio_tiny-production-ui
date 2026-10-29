@@ -1,5 +1,5 @@
 return {
-	DEBUG = false,
+	DEBUG = true,
 	TOGGLE_WINDOW_INPUT = "tpu-toggle-window",
 
 	TICK_INTERVAL = 5,

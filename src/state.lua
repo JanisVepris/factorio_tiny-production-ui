@@ -18,6 +18,7 @@ local snitch = require("src.util.snitch")
 ---@field window_location GuiLocation?
 ---@field paused boolean
 ---@field action_buttons_visible boolean
+---@field reorder_source integer?
 
 local State = {}
 
@@ -162,6 +163,7 @@ end
 ---@param columns integer
 function State.setColumns(player_index, columns)
 	State.get(player_index).columns = columns
+	State.cancelSlotMove(player_index)
 end
 
 ---@param player_index integer
@@ -190,6 +192,7 @@ end
 ---@param rows integer
 function State.setRows(player_index, rows)
 	State.get(player_index).rows = rows
+	State.cancelSlotMove(player_index)
 end
 
 ---@param player_index integer
@@ -232,6 +235,51 @@ end
 ---@param value string?
 function State.setSlotValue(player_index, slot_idx, value)
 	State.get(player_index).slots[slot_idx] = value
+	State.cancelSlotMove(player_index)
+end
+
+function State.getReorderSource(player_index)
+	local player_state = State.get(player_index)
+	local idx = player_state.reorder_source
+	if idx and idx >= 1 and idx <= player_state.rows * player_state.columns and player_state.slots[idx] then
+		return idx
+	end
+end
+
+function State.cancelSlotMove(player_index)
+	State.get(player_index).reorder_source = nil
+end
+
+function State.selectSlotForMove(player_index, idx)
+	local player_state = State.get(player_index)
+	if idx >= 1 and idx <= player_state.rows * player_state.columns and player_state.slots[idx] then
+		player_state.reorder_source = idx
+		return true
+	end
+	return false
+end
+
+-- Insert the source at the destination, shifting intervening slots in order.
+-- Copy both sparse tables together so empty slots and fluid types are preserved.
+function State.moveSlot(player_index, source, destination)
+	local player_state = State.get(player_index)
+	local count = player_state.rows * player_state.columns
+	if source < 1 or source > count or destination < 1 or destination > count
+		or source % 1 ~= 0 or destination % 1 ~= 0 or not player_state.slots[source] then
+		return false
+	end
+	local value = player_state.slots[source]
+	local slot_type = State.getSlotType(player_index, source)
+	player_state.slot_types = player_state.slot_types or {}
+	local step = source < destination and 1 or -1
+	for idx = source, destination - step, step do
+		player_state.slots[idx] = player_state.slots[idx + step]
+		player_state.slot_types[idx] = State.getSlotType(player_index, idx + step)
+	end
+	player_state.slots[destination] = value
+	player_state.slot_types[destination] = slot_type
+	State.cancelSlotMove(player_index)
+	return true
 end
 
 ---@param player_index integer

@@ -24,6 +24,28 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.register(Action.REORDER_SLOT, function(event)
+		if event.button and event.button ~= defines.mouse_button_type.left then
+			return
+		end
+		local player = game.get_player(event.player_index)
+		local idx = event.element.tags.slot_idx
+		if not player or not idx then
+			return
+		end
+		local source = State.getReorderSource(player.index)
+		if source then
+			if source ~= idx then
+				State.moveSlot(player.index, source, idx)
+			end
+			State.cancelSlotMove(player.index)
+		else
+			State.selectSlotForMove(player.index, idx)
+		end
+		MainWindow.refreshSlotTable(player)
+		MainWindow.updateSlots(player)
+	end)
+
 	Gui.register(Action.TOGGLE_ACTION_BUTTONS, function(event)
 		local player = game.get_player(event.player_index)
 		if player then
@@ -127,8 +149,14 @@ function GuiEvents.init()
 		end
 
 		snitch({ msg = "Slot value change", val = element.elem_value })
+		local moving = State.getReorderSource(player.index) ~= nil
 		State.setSlotValue(event.player_index, idx, element.elem_value)
-		Slot.refresh(element.parent, player)
+		if moving then
+			MainWindow.refreshSlotTable(player)
+			MainWindow.updateSlots(player)
+		else
+			Slot.refresh(element.parent, player)
+		end
 	end)
 
 	-- Update rate labels

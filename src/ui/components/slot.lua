@@ -21,7 +21,7 @@ function Slot.new(idx, player)
 				name = Const.UI_ID.SLOT_CHOOSER .. idx,
 				elem_type = slot_type,
 				[slot_type] = State.get(player.index).slots[idx],
-				style = "slot_button",
+				style = State.getReorderSource(player.index) == idx and "yellow_slot_button" or "slot_button",
 				tooltip = { "tpu.rate-slot", idx },
 			}),
 

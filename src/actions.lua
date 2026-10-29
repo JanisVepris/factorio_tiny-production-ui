@@ -1,4 +1,5 @@
 return {
+	REORDER_SLOT = "tpu_reorder_slot",
 	TOGGLE_ORIENTATION = "tpu_toggle_orientation",
 	TOGGLE_MODE = "tpu_toggle_mode",
 	TOGGLE_UNIT = "tpu_toggle_unit",

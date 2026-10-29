@@ -62,6 +62,7 @@ function ActionButtons.new(player)
 	first_row[#first_row + 1] = PauseButton.new(player)
 	return Gui.flow({
 		name = Const.UI_ID.ACTION_BTN_CONTAINER,
+		visible = State.areActionButtonsVisible(player.index),
 		direction = direction(player),
 
 		children = {

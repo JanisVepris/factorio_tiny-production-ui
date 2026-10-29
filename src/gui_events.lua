@@ -24,6 +24,14 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.register(Action.TOGGLE_ACTION_BUTTONS, function(event)
+		local player = game.get_player(event.player_index)
+		if player then
+			State.toggleActionButtons(player.index)
+			MainWindow.updateActionButtonsVisibility(player)
+		end
+	end)
+
 	Gui.register(Action.TOGGLE_PAUSE, function(event)
 		local player = game.get_player(event.player_index)
 		if not player then

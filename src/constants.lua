@@ -20,6 +20,9 @@ return {
 		MAIN_WINDOW_OUTER = "tpu_main_mindow_outer",
 		MAIN_WINDOW = "tpu_main_mindow",
 		TITLE_BAR_CONTAINER = "tpu_main_title_bar_container",
+		TITLE_BAR_DRAG_START = "tpu_title_drag_start",
+		TITLE_BAR_DRAG_END = "tpu_title_drag_end",
+		BTN_TOGGLE_ACTION_BUTTONS = "tpu_toggle_action_buttons",
 
 		-- Action buttons
 		ACTION_BTN_CONTAINER = "tpu_action_btn_container",

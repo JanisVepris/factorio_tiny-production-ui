@@ -39,7 +39,7 @@ function MainWindow.toggle(player)
 					size = { 385, 165 },
 
 					style_mods = {
-						padding = 2,
+						padding = 3,
 					},
 
 					children = {
@@ -67,6 +67,15 @@ function MainWindow.refresh(player)
 	MainWindow.toggle(player)
 	MainWindow.toggle(player)
 	MainWindow.updateSlots(player)
+end
+
+function MainWindow.updateActionButtonsVisibility(player)
+	local window, outer = Gui.getMainWindow(player)
+	if not window then
+		return
+	end
+	window[Const.UI_ID.ACTION_BTN_CONTAINER].visible = state.areActionButtonsVisible(player.index)
+	TitleBar.update(outer[Const.UI_ID.TITLE_BAR_CONTAINER], player)
 end
 
 function MainWindow.updateSlots(player)

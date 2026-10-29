@@ -17,6 +17,7 @@ local snitch = require("src.util.snitch")
 ---@field planet string?
 ---@field window_location GuiLocation?
 ---@field paused boolean
+---@field action_buttons_visible boolean
 
 local State = {}
 
@@ -60,11 +61,24 @@ function State.default(player_index)
 		slots = {},
 		slot_types = {},
 		paused = false,
+		action_buttons_visible = true,
 	}
 
 	storage.players[player_index] = state
 
 	return State.get(player_index)
+end
+
+---@param player_index integer
+function State.areActionButtonsVisible(player_index)
+	return State.get(player_index).action_buttons_visible ~= false
+end
+
+---@param player_index integer
+function State.toggleActionButtons(player_index)
+	local visible = not State.areActionButtonsVisible(player_index)
+	State.get(player_index).action_buttons_visible = visible
+	return visible
 end
 
 ---@param player_index integer

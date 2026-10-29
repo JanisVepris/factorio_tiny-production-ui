@@ -1,5 +1,32 @@
 local Const = require("src.constants")
 
+local function toggle_background(field, color)
+	local styles = data.raw["gui-style"].default
+	local style = styles.frame_action_button
+	while not style[field] do
+		style = styles[style.parent]
+	end
+	local graphics = table.deepcopy(style[field])
+	graphics.base.tint = color
+	if graphics.glow then
+		graphics.glow.tint = color
+	end
+	return graphics
+end
+
+for name, color in pairs({
+	tpu_action_buttons_visible = { 1, 0.6, 0.15 },
+	tpu_action_buttons_hidden = { 0.2, 0.9, 0.2 },
+}) do
+	data.raw["gui-style"].default[name] = {
+		type = "button_style",
+		parent = "frame_action_button",
+		default_graphical_set = toggle_background("default_graphical_set", color),
+		hovered_graphical_set = toggle_background("hovered_graphical_set", color),
+		clicked_graphical_set = toggle_background("clicked_graphical_set", color),
+	}
+end
+
 data.raw["gui-style"].default.tpu_vertical_drag_handle = {
 	type = "empty_widget_style",
 	parent = "draggable_space_header",

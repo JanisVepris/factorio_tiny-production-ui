@@ -1,7 +1,8 @@
 return {
 	DEBUG = true,
 	-- Increment when changing the saved GUI structure or event bindings.
-	GUI_SCHEMA_VERSION = 1,
+	GUI_SCHEMA_VERSION = 3,
+	AUTO_HIDE_DELAY = 5,
 	TOGGLE_WINDOW_INPUT = "tpu-toggle-window",
 
 	TICK_INTERVAL = 5,
@@ -21,6 +22,7 @@ return {
 		BTN_SHORTCUT = "tpu_btn_shortcut",
 		MAIN_WINDOW_OUTER = "tpu_main_mindow_outer",
 		MAIN_WINDOW = "tpu_main_mindow",
+		MAIN_WINDOW_VIEWPORT = "tpu_main_window_viewport",
 		TITLE_BAR_CONTAINER = "tpu_main_title_bar_container",
 		TITLE_BAR_DRAG_START = "tpu_title_drag_start",
 		TITLE_BAR_DRAG_END = "tpu_title_drag_end",
@@ -40,6 +42,7 @@ return {
 		BTN_PLANET_SELECTOR = "tpu_btn_planet_selector",
 		BTN_UNIT_SELECTOR = "tpu_btn_unit_selector",
 		BTN_PAUSE = "tpu_btn_pause",
+		BTN_AUTO_HIDE = "tpu_btn_auto_hide",
 
 		-- Slot table
 		SLOT_TABLE = "tpu_slot_table",

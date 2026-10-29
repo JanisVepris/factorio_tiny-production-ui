@@ -24,7 +24,8 @@ function Gui.getMainWindow(player)
 		return outer, outer
 	end
 
-	local window = outer[Const.UI_ID.MAIN_WINDOW]
+	local viewport = outer[Const.UI_ID.MAIN_WINDOW_VIEWPORT]
+	local window = (viewport or outer)[Const.UI_ID.MAIN_WINDOW]
 	if not window or not window.valid then
 		return nil, outer
 	end
@@ -84,6 +85,9 @@ function Gui.render(parent, definition)
 	if definition.onClick then
 		props.tags = props.tags or {}
 		props.tags.action = definition.onClick
+	end
+	if props.raise_hover_events == nil then
+		props.raise_hover_events = true
 	end
 
 	local element = parent.add(props)

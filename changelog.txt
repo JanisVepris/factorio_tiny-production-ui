@@ -51,5 +51,6 @@ Version: 2.2.0
 Date: 2026-10-30
   Features:
     - You can now click on slot text and then click on another slot's text to switch them, making reordering your table a bit easier
+    - Added an auto-hide feature for your convenience. Inspired by Kuxynator's fork (thanks!)
   Changes:
   Fixes:

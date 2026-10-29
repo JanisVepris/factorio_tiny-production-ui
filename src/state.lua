@@ -19,6 +19,10 @@ local snitch = require("src.util.snitch")
 ---@field paused boolean
 ---@field action_buttons_visible boolean
 ---@field reorder_source integer?
+---@field auto_hide boolean
+---@field auto_hide_revealed boolean?
+---@field auto_hide_hovered LuaGuiElement?
+---@field auto_hide_deadline integer?
 
 local State = {}
 
@@ -65,6 +69,7 @@ local function defaults()
 		slot_types = {},
 		paused = false,
 		action_buttons_visible = true,
+		auto_hide = false,
 	}
 end
 
@@ -85,6 +90,17 @@ function State.migrate(player_index)
 			player_state[key] = value
 		end
 	end
+end
+
+---@param player_index integer
+function State.isAutoHideEnabled(player_index)
+	return State.get(player_index).auto_hide == true
+end
+
+function State.toggleAutoHide(player_index)
+	local enabled = not State.isAutoHideEnabled(player_index)
+	State.get(player_index).auto_hide = enabled
+	return enabled
 end
 
 ---@param player_index integer

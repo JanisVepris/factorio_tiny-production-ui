@@ -1,4 +1,5 @@
 return {
+	TOGGLE_AUTO_HIDE = "tpu_toggle_auto_hide",
 	REORDER_SLOT = "tpu_reorder_slot",
 	TOGGLE_ORIENTATION = "tpu_toggle_orientation",
 	TOGGLE_MODE = "tpu_toggle_mode",

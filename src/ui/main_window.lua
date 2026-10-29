@@ -6,6 +6,7 @@ local Slot = require("src.ui.components.slot")
 local TitleBar = require("src.ui.components.title_bar")
 local snitch = require("src.util.snitch")
 local state = require("src.state")
+local AutoHide = require("src.ui.auto_hide")
 
 local MainWindow = {}
 
@@ -15,6 +16,7 @@ function MainWindow.toggle(player)
 	if existing then
 		snitch("Toggle main window off")
 		state.cancelSlotMove(player.index)
+		AutoHide.reset(player)
 		local location = existing.location
 		state.get(player.index).window_location = { x = location.x, y = location.y }
 		existing.destroy()
@@ -35,20 +37,29 @@ function MainWindow.toggle(player)
 			},
 			children = {
 				TitleBar.new(player),
-				Gui.flow({
-					name = Const.UI_ID.MAIN_WINDOW,
-					direction = state.getOrientation(player.index),
-					size = { 385, 165 },
-
-					style_mods = {
-						padding = 3,
-					},
-
+				{
+					type = "scroll-pane",
+					name = Const.UI_ID.MAIN_WINDOW_VIEWPORT,
+					style = "tpu_content_viewport",
+					horizontal_scroll_policy = "never",
+					vertical_scroll_policy = "never",
 					children = {
-						ActionButtons.new(player),
-						SlotTable.new(player),
+						Gui.flow({
+							name = Const.UI_ID.MAIN_WINDOW,
+							direction = state.getOrientation(player.index),
+							size = { 385, 165 },
+
+							style_mods = {
+								padding = 3,
+							},
+
+							children = {
+								ActionButtons.new(player),
+								SlotTable.new(player),
+							},
+						}),
 					},
-				}),
+				},
 			},
 		})
 	)
@@ -58,6 +69,8 @@ function MainWindow.toggle(player)
 		outer.force_auto_center()
 	end
 	TitleBar.setDragTarget(outer[Const.UI_ID.TITLE_BAR_CONTAINER], outer)
+	AutoHide.reset(player)
+	AutoHide.apply(player)
 end
 
 function MainWindow.rebuild(player)
@@ -88,7 +101,7 @@ function MainWindow.ensureCurrent(player)
 	local root = Gui.getMainWindowRoot(player)
 	if root and (root.name ~= Const.UI_ID.MAIN_WINDOW_OUTER
 		or root.tags.tpu_gui_schema ~= Const.GUI_SCHEMA_VERSION
-		or not root[Const.UI_ID.MAIN_WINDOW]) then
+		or not Gui.getMainWindow(player)) then
 		MainWindow.rebuild(player)
 		return false
 	end
@@ -113,7 +126,7 @@ function MainWindow.updateSlots(player)
 		return
 	end
 	local window = Gui.getMainWindow(player)
-	if not window then
+	if not window or state.get(player.index).auto_hide_revealed == false then
 		return
 	end
 

@@ -12,6 +12,7 @@ local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
 local UnitSelector = require("src.ui.components.unit_selector")
 local PauseButton = require("src.ui.components.pause_button")
+local AutoHideButton = require("src.ui.components.auto_hide_button")
 
 local ActionButtons = {}
 
@@ -60,6 +61,7 @@ end
 function ActionButtons.new(player)
 	local first_row = dimension_buttons(player)
 	first_row[#first_row + 1] = PauseButton.new(player)
+	first_row[#first_row + 1] = AutoHideButton.new(player)
 	return Gui.flow({
 		name = Const.UI_ID.ACTION_BTN_CONTAINER,
 		visible = State.areActionButtonsVisible(player.index),

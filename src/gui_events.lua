@@ -9,6 +9,8 @@ local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
 local UnitSelector = require("src.ui.components.unit_selector")
 local PauseButton = require("src.ui.components.pause_button")
+local AutoHideButton = require("src.ui.components.auto_hide_button")
+local AutoHide = require("src.ui.auto_hide")
 local is_tpu_slot_chooser = require("src.util.is_tpu_slot_chooser")
 local idx_from_name = require("src.util.idx_from_name")
 local is_tpu_planet_chooser = require("src.util.is_tpu_planet_chooser")
@@ -24,6 +26,27 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.register(Action.TOGGLE_AUTO_HIDE, function(event)
+		local player = game.get_player(event.player_index)
+		if not player then return end
+		State.toggleAutoHide(player.index)
+		AutoHide.reset(player)
+		AutoHide.hover(player, event.element, event.tick)
+		AutoHide.apply(player)
+		AutoHideButton.update(event.element, player)
+	end)
+
+	script.on_event(defines.events.on_gui_hover, function(event)
+		local player = game.get_player(event.player_index)
+		if player and event.element and event.element.valid and MainWindow.ensureCurrent(player) then
+			AutoHide.hover(player, event.element, event.tick)
+		end
+	end)
+	script.on_event(defines.events.on_gui_leave, function(event)
+		local player = game.get_player(event.player_index)
+		if player then AutoHide.leave(player, event.element, event.tick) end
+	end)
+
 	Gui.setEventGuard(function(event)
 		local player = game.get_player(event.player_index)
 		return player and MainWindow.ensureCurrent(player)
@@ -173,8 +196,9 @@ function GuiEvents.init()
 	-- Update rate labels
 	script.on_nth_tick(Const.TICK_INTERVAL, function()
 		for _, player in pairs(game.connected_players) do
-			if MainWindow.ensureCurrent(player) and not State.isPaused(player.index) then
-				MainWindow.updateSlots(player)
+			if MainWindow.ensureCurrent(player) then
+				AutoHide.update(player, game.tick)
+				if not State.isPaused(player.index) then MainWindow.updateSlots(player) end
 			end
 		end
 	end)

@@ -40,6 +40,7 @@ return {
 		SLOT_OUTER_FRAME = "tpu_slot_outer_frame",
 		SLOT = "tpu_slot_",
 		SLOT_CHOOSER = "tpu_slot_chooser_",
+		SLOT_TYPE_SWITCH = "tpu_slot_type_switch_",
 		RATE_DISPLAY = "rate_display_",
 		RATE_TOTAL_PRODUCTION = "rate_total_production_",
 		RATE_TOTAL_CONSUMPTION = "rate_total_production_consumption_",

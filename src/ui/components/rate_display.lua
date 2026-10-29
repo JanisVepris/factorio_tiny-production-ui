@@ -2,13 +2,14 @@ local Const = require("src.constants")
 local Gui = require("src.gui")
 local State = require("src.state")
 local Units = require("src.units")
+local SlotTypeSwitch = require("src.ui.components.slot_type_switch")
 local format_number = require("src.util.format_number")
 local get_production_stats = require("src.util.get_production_stats")
 
 local RateDisplay = {}
 
-local function tooltip(player, key)
-	return { "tpu.rate-unit-tooltip", { key }, Units.get(State.getUnit(player.index)).name }
+local function tooltip(player, idx, key)
+	return { "tpu.rate-unit-tooltip", { key }, Units.name(State.getUnit(player.index), State.getSlotType(player.index, idx)) }
 end
 
 local function color(value)
@@ -51,19 +52,7 @@ local function children(player, idx)
 	local item = State.get(player.index).slots[idx]
 
 	if not item then
-		return {
-			Gui.label({
-				name = Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx,
-				caption = { "tpu.not-available" },
-				tooltip = "",
-				style_mods = {
-					font_color = color(0),
-					font = Const.RATE_FONT_STYLE,
-					padding = 0,
-					top_padding = 10,
-				},
-			}),
-		}
+		return { SlotTypeSwitch.new(player, idx) }
 	end
 
 	if State.get(player.index).mode == "total" then
@@ -71,7 +60,7 @@ local function children(player, idx)
 			Gui.label({
 				name = Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx,
 				caption = { "tpu.not-available" },
-				tooltip = tooltip(player, "tpu.production-tooltip"),
+				tooltip = tooltip(player, idx, "tpu.production-tooltip"),
 				style_mods = {
 					font_color = color(0),
 					font = Const.RATE_FONT_STYLE,
@@ -81,7 +70,7 @@ local function children(player, idx)
 			Gui.label({
 				name = Const.UI_ID.RATE_TOTAL_CONSUMPTION .. idx,
 				caption = { "tpu.not-available" },
-				tooltip = tooltip(player, "tpu.consumption-tooltip"),
+				tooltip = tooltip(player, idx, "tpu.consumption-tooltip"),
 				style_mods = {
 					font_color = color(0),
 					font = Const.RATE_FONT_STYLE,
@@ -95,7 +84,7 @@ local function children(player, idx)
 		Gui.label({
 			name = Const.UI_ID.RATE_DIFF .. idx,
 			caption = { "tpu.not-available" },
-			tooltip = tooltip(player, "tpu.diff-tooltip"),
+			tooltip = tooltip(player, idx, "tpu.diff-tooltip"),
 			style_mods = {
 				font_color = color(0),
 				font = "default-small",
@@ -138,24 +127,24 @@ function RateDisplay.update(element, player, idx)
 	local precision_rate = State.get(player.index).rate_precision
 
 	local production, consumption, diff =
-		get_production_stats(player, item, precision_rate, State.getPlanet(player.index))
-	production, consumption, diff = Units.convert(production, consumption, item, State.getUnit(player.index))
+		get_production_stats(player, item, precision_rate, State.getPlanet(player.index), State.getSlotType(player.index, idx))
+	production, consumption, diff = Units.convert(production, consumption, item, State.getUnit(player.index), State.getSlotType(player.index, idx))
 
 	if State.get(player.index).mode == "total" then
 		local production_label = element[Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx]
 		production_label.caption = { "tpu.rate-value", sign(production, "production"), format_number(production) }
 		production_label.style.font_color = color(production)
-		production_label.tooltip = tooltip(player, "tpu.production-tooltip")
+		production_label.tooltip = tooltip(player, idx, "tpu.production-tooltip")
 
 		local consumption_label = element[Const.UI_ID.RATE_TOTAL_CONSUMPTION .. idx]
 		consumption_label.caption = { "tpu.rate-value", sign(consumption, "consumption"), format_number(consumption) }
 		consumption_label.style.font_color = color(-consumption)
-		consumption_label.tooltip = tooltip(player, "tpu.consumption-tooltip")
+		consumption_label.tooltip = tooltip(player, idx, "tpu.consumption-tooltip")
 	else
 		local diff_label = element[Const.UI_ID.RATE_DIFF .. idx]
 		diff_label.caption = { "tpu.rate-value", sign(diff, "diff"), format_number(diff) }
 		diff_label.style.font_color = color(diff)
-		diff_label.tooltip = tooltip(player, "tpu.diff-tooltip")
+		diff_label.tooltip = tooltip(player, idx, "tpu.diff-tooltip")
 	end
 end
 

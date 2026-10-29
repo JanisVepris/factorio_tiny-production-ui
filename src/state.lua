@@ -13,6 +13,7 @@ local snitch = require("src.util.snitch")
 ---@field rows integer
 ---@field rate_precision unknown
 ---@field slots table<integer, string>
+---@field slot_types table<integer, string>?
 ---@field planet string?
 ---@field window_location GuiLocation?
 
@@ -56,6 +57,7 @@ function State.default(player_index)
 		columns = Const.DEFAULTS.COLUMNS,
 		rate_precision = Const.DEFAULTS.RATE_PRECISION,
 		slots = {},
+		slot_types = {},
 	}
 
 	storage.players[player_index] = state
@@ -178,6 +180,28 @@ end
 
 ---@param player_index integer
 ---@param slot_idx number
+function State.getSlotType(player_index, slot_idx)
+	local types = State.get(player_index).slot_types
+	return types and types[slot_idx] or "item"
+end
+
+---@param player_index integer
+---@param slot_idx integer
+---@param slot_type 'item'|'fluid'
+function State.setSlotType(player_index, slot_idx, slot_type)
+	assert(slot_type == "item" or slot_type == "fluid", "Invalid slot type")
+	local player_state = State.get(player_index)
+	if player_state.slots[slot_idx] then
+		return false
+	end
+	player_state.slot_types = player_state.slot_types or {}
+	player_state.slot_types[slot_idx] = slot_type
+	return true
+end
+
+---@param player_index integer
+---@param slot_idx integer
+---@param value string?
 function State.setSlotValue(player_index, slot_idx, value)
 	State.get(player_index).slots[slot_idx] = value
 end

@@ -117,4 +117,9 @@ function Gui.elemChooser(props)
 	return props
 end
 
+function Gui.switch(props)
+	props.type = "switch"
+	return props
+end
+
 return Gui

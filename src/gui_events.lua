@@ -23,6 +23,29 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	script.on_event(defines.events.on_gui_switch_state_changed, function(event)
+		local element = event.element
+		local prefix = Const.UI_ID.SLOT_TYPE_SWITCH
+		if not element or not element.valid or element.name:sub(1, #prefix) ~= prefix then
+			return
+		end
+		local player = game.get_player(event.player_index)
+		local idx = idx_from_name(element.name)
+		if not player or not idx then
+			return
+		end
+		local slot_type = element.switch_state == "right" and "fluid" or "item"
+		if State.setSlotType(player.index, idx, slot_type) then
+			local slot = element.parent
+			while slot and slot.name ~= Const.UI_ID.SLOT .. idx do
+				slot = slot.parent
+			end
+			if slot then
+				Slot.refresh(slot, player)
+			end
+		end
+	end)
+
 	Gui.register(Action.TOGGLE_UNIT, function(event)
 		local player = game.get_player(event.player_index)
 		if not player then

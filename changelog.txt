@@ -35,3 +35,8 @@ Date: 2026-10-28
     - Added a configurable keyboard shortcut for toggling the windown on/off (unset by default)
     - Max columns/rows is now set at 100. Should be enough slots for everyone's needs
     - Added a planet selector that allows seeing stats for the selected planet only
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-10-29
+  Changes:
+    - Add a unit selector. Now you can switch the production rates between units/stacks.

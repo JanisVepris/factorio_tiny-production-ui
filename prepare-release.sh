@@ -36,6 +36,8 @@ try:
                     continue
                 source = Path(directory) / filename
                 relative = source.relative_to(project)
+                if relative == Path("prepare-release.sh"):
+                    continue
                 archive.write(source, (Path(folder) / relative).as_posix())
     os.replace(temporary, destination)
     print(f"Release prepared: {destination}")

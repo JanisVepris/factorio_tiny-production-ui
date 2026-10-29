@@ -27,12 +27,12 @@ function MainWindow.toggle(player)
 		player.gui.screen,
 		Gui.frame({
 			name = Const.UI_ID.MAIN_WINDOW_OUTER,
-			direction = "vertical",
+			direction = state.getOrientation(player.index),
 			style_mods = {
 				padding = 0,
 			},
 			children = {
-				TitleBar.new(),
+				TitleBar.new(player),
 				Gui.flow({
 					name = Const.UI_ID.MAIN_WINDOW,
 					direction = state.getOrientation(player.index),

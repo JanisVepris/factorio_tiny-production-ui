@@ -42,3 +42,4 @@ Date: 2026-10-29
     - Fluid support! Empty slots can now be toggled between item/fluid types.
     - Add a unit selector. Now you can switch the production rates between units/stacks.
     - Add a Pause/Play button allowing you to temporarily pause the rates at their current values
+    - Move the window drag handle to the left side in horizontal mode. Makes more sense, loks better.

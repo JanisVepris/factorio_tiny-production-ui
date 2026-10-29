@@ -1,5 +1,22 @@
 local Const = require("src.constants")
 
+data.raw["gui-style"].default.tpu_vertical_drag_handle = {
+	type = "empty_widget_style",
+	parent = "draggable_space_header",
+	graphical_set = {
+		base = {
+			type = "composition",
+			center = {
+				filename = "__tiny-production-ui__/img/vertical-drag-handle.png",
+				width = 8,
+				height = 4,
+			},
+			overall_tiling_vertical_size = 4,
+		},
+		shadow = data.raw["gui-style"].default.draggable_space.graphical_set.shadow,
+	},
+}
+
 for _, precision in ipairs({
 	"five_seconds",
 	"one_minute",

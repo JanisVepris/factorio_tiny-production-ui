@@ -7,6 +7,7 @@ local Slot = require("src.ui.components.slot")
 local ToggleRatePrecisionButton = require("src.ui.components.toggle_rate_precision_button")
 local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
+local UnitSelector = require("src.ui.components.unit_selector")
 local is_tpu_slot_chooser = require("src.util.is_tpu_slot_chooser")
 local idx_from_name = require("src.util.idx_from_name")
 local is_tpu_planet_chooser = require("src.util.is_tpu_planet_chooser")
@@ -22,6 +23,17 @@ local function toggleWindow(event)
 end
 
 function GuiEvents.init()
+	Gui.register(Action.TOGGLE_UNIT, function(event)
+		local player = game.get_player(event.player_index)
+		if not player then
+			return
+		end
+
+		State.toggleUnit(player.index)
+		UnitSelector.update(event.element, player)
+		MainWindow.updateSlots(player)
+	end)
+
 	script.on_event(Const.TOGGLE_WINDOW_INPUT, toggleWindow)
 
 	-- Handle shortcut bar button click

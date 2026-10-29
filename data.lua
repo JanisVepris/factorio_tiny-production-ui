@@ -23,6 +23,20 @@ end
 
 data:extend({
 	{
+		type = "sprite",
+		name = "tpu_unit_items",
+		filename = "__tiny-production-ui__/img/unit-items.png",
+		width = 32,
+		height = 32,
+	},
+	{
+		type = "sprite",
+		name = "tpu_unit_stacks",
+		filename = "__tiny-production-ui__/img/unit-stacks.png",
+		width = 32,
+		height = 32,
+	},
+	{
 		type = "custom-input",
 		name = Const.TOGGLE_WINDOW_INPUT,
 		key_sequence = "",

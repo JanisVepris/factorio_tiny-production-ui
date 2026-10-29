@@ -11,6 +11,7 @@ return {
 		ROWS = 2,
 		ORIENTATION = "vertical",
 		MODE = "total",
+		UNIT = "items",
 		RATE_PRECISION = defines.flow_precision_index.ten_minutes,
 	},
 
@@ -32,6 +33,7 @@ return {
 		BTN_TOGGLE_ORIENTATION = "tpu_btn_toggle_orientation",
 		BTN_TOGGLE_RATE_PRECISION = "tpu_btn_toggle_rate_precision",
 		BTN_PLANET_SELECTOR = "tpu_btn_planet_selector",
+		BTN_UNIT_SELECTOR = "tpu_btn_unit_selector",
 
 		-- Slot table
 		SLOT_TABLE = "tpu_slot_table",

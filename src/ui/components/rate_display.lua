@@ -1,10 +1,15 @@
 local Const = require("src.constants")
 local Gui = require("src.gui")
 local State = require("src.state")
+local Units = require("src.units")
 local format_number = require("src.util.format_number")
 local get_production_stats = require("src.util.get_production_stats")
 
 local RateDisplay = {}
+
+local function tooltip(player, key)
+	return { "tpu.rate-unit-tooltip", { key }, Units.get(State.getUnit(player.index)).name }
+end
 
 local function color(value)
 	if value > 0 then
@@ -66,7 +71,7 @@ local function children(player, idx)
 			Gui.label({
 				name = Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx,
 				caption = { "tpu.not-available" },
-				tooltip = { "tpu.production-tooltip" },
+				tooltip = tooltip(player, "tpu.production-tooltip"),
 				style_mods = {
 					font_color = color(0),
 					font = Const.RATE_FONT_STYLE,
@@ -76,7 +81,7 @@ local function children(player, idx)
 			Gui.label({
 				name = Const.UI_ID.RATE_TOTAL_CONSUMPTION .. idx,
 				caption = { "tpu.not-available" },
-				tooltip = { "tpu.consumption-tooltip" },
+				tooltip = tooltip(player, "tpu.consumption-tooltip"),
 				style_mods = {
 					font_color = color(0),
 					font = Const.RATE_FONT_STYLE,
@@ -90,7 +95,7 @@ local function children(player, idx)
 		Gui.label({
 			name = Const.UI_ID.RATE_DIFF .. idx,
 			caption = { "tpu.not-available" },
-			tooltip = { "tpu.diff-tooltip" },
+			tooltip = tooltip(player, "tpu.diff-tooltip"),
 			style_mods = {
 				font_color = color(0),
 				font = "default-small",
@@ -134,19 +139,23 @@ function RateDisplay.update(element, player, idx)
 
 	local production, consumption, diff =
 		get_production_stats(player, item, precision_rate, State.getPlanet(player.index))
+	production, consumption, diff = Units.convert(production, consumption, item, State.getUnit(player.index))
 
 	if State.get(player.index).mode == "total" then
 		local production_label = element[Const.UI_ID.RATE_TOTAL_PRODUCTION .. idx]
 		production_label.caption = { "tpu.rate-value", sign(production, "production"), format_number(production) }
 		production_label.style.font_color = color(production)
+		production_label.tooltip = tooltip(player, "tpu.production-tooltip")
 
 		local consumption_label = element[Const.UI_ID.RATE_TOTAL_CONSUMPTION .. idx]
 		consumption_label.caption = { "tpu.rate-value", sign(consumption, "consumption"), format_number(consumption) }
 		consumption_label.style.font_color = color(-consumption)
+		consumption_label.tooltip = tooltip(player, "tpu.consumption-tooltip")
 	else
 		local diff_label = element[Const.UI_ID.RATE_DIFF .. idx]
 		diff_label.caption = { "tpu.rate-value", sign(diff, "diff"), format_number(diff) }
 		diff_label.style.font_color = color(diff)
+		diff_label.tooltip = tooltip(player, "tpu.diff-tooltip")
 	end
 end
 

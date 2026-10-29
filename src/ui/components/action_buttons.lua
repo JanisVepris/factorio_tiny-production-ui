@@ -10,6 +10,7 @@ local ToggleOrientationButton = require("src.ui.components.toggle_orientation_bu
 local ToggleRatePrecisionButton = require("src.ui.components.toggle_rate_precision_button")
 local ToggleModeButton = require("src.ui.components.toggle_mode_button")
 local PlanetSelector = require("src.ui.components.planet_selector")
+local UnitSelector = require("src.ui.components.unit_selector")
 
 local ActionButtons = {}
 
@@ -74,6 +75,7 @@ function ActionButtons.new(player)
 					ToggleOrientationButton.new(player),
 					ToggleRatePrecisionButton.new(player),
 					ToggleModeButton.new(player),
+					UnitSelector.new(player),
 					PlanetSelector.new(player),
 				},
 			}),

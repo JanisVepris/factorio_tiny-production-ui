@@ -8,7 +8,7 @@ local format_number = function(originalNumber)
 	end
 
 	if number < 1000 then
-		return string.format("%.2f", number)
+		return string.format("%.2f", originalNumber)
 	end
 
 	local num = 0.0
@@ -20,10 +20,10 @@ local format_number = function(originalNumber)
 	elseif number > 999999 and number < 1000000000 then
 		num = number / 1000000.0
 		suffix = "tpu.number-million"
-	elseif number > 999999999 < 1000000000000 then
+	elseif number > 999999999 and number < 1000000000000 then
 		num = number / 1000000000.0
 		suffix = "tpu.number-billion"
-	elseif number > 999999999999 < 1000000000000000 then
+	elseif number > 999999999999 and number < 1000000000000000 then
 		num = number / 1000000000000.0
 		suffix = "tpu.number-trillion"
 	else

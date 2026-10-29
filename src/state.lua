@@ -1,4 +1,5 @@
 local Const = require("src.constants")
+local Units = require("src.units")
 local snitch = require("src.util.snitch")
 
 ---@alias Orientation 'vertical'|'horizontal'
@@ -7,6 +8,7 @@ local snitch = require("src.util.snitch")
 ---@class PlayerState
 ---@field orientation Orientation
 ---@field mode DisplayMode
+---@field unit string
 ---@field columns integer
 ---@field rows integer
 ---@field rate_precision unknown
@@ -49,6 +51,7 @@ function State.default(player_index)
 	local state = {
 		orientation = Const.DEFAULTS.ORIENTATION,
 		mode = Const.DEFAULTS.MODE,
+		unit = Const.DEFAULTS.UNIT,
 		rows = Const.DEFAULTS.ROWS,
 		columns = Const.DEFAULTS.COLUMNS,
 		rate_precision = Const.DEFAULTS.RATE_PRECISION,
@@ -58,6 +61,18 @@ function State.default(player_index)
 	storage.players[player_index] = state
 
 	return State.get(player_index)
+end
+
+---@param player_index integer
+function State.getUnit(player_index)
+	return Units.get(State.get(player_index).unit or Const.DEFAULTS.UNIT).id
+end
+
+---@param player_index integer
+function State.toggleUnit(player_index)
+	local unit = Units.next(State.getUnit(player_index))
+	State.get(player_index).unit = unit
+	return unit
 end
 
 ---@param player_index integer

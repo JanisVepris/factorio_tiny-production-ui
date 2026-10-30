@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux
+*~
+.directory
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Release builds
+*.zip

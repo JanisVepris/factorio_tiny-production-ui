@@ -56,3 +56,4 @@ Version: 2.2.1
 Date: 2026-10-31
   Fixes:
     - Fix: TPU crashing when an item set in the table no longer exists in the game (e.g. removed by a mod).
+    - Fix: TPU shortcut bar button not indicating if TPU is on or off.

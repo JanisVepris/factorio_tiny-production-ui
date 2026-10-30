@@ -20,6 +20,7 @@ function MainWindow.toggle(player)
 		local location = existing.location
 		state.get(player.index).window_location = { x = location.x, y = location.y }
 		existing.destroy()
+		player.set_shortcut_toggled(Const.UI_ID.BTN_SHORTCUT, false)
 
 		return
 	end
@@ -71,6 +72,7 @@ function MainWindow.toggle(player)
 	TitleBar.setDragTarget(outer[Const.UI_ID.TITLE_BAR_CONTAINER], outer)
 	AutoHide.reset(player)
 	AutoHide.apply(player)
+	player.set_shortcut_toggled(Const.UI_ID.BTN_SHORTCUT, true)
 end
 
 function MainWindow.rebuild(player)

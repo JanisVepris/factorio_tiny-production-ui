@@ -8,6 +8,7 @@ python3 - "$project_dir" <<'PY'
 import json
 import os
 import re
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -22,6 +23,25 @@ if not re.fullmatch(r"[A-Za-z0-9_-]+", name):
 if not re.fullmatch(r"\d+\.\d+\.\d+", version):
     raise SystemExit("Expected an x.x.x version in info.json")
 
+excluded = {Path("prepare-release.sh"), Path(".gitignore")}
+files = []
+for directory, subdirectories, filenames in os.walk(project):
+    subdirectories[:] = sorted(d for d in subdirectories if d != ".git")
+    for filename in sorted(filenames):
+        relative = (Path(directory) / filename).relative_to(project)
+        if filename != ".git" and relative not in excluded:
+            files.append(relative.as_posix())
+
+# Skip files that match .gitignore. --no-index also catches tracked files.
+result = subprocess.run(
+    ["git", "-C", str(project), "check-ignore", "--no-index", "-z", "--stdin"],
+    input="\0".join(files).encode(),
+    capture_output=True,
+)
+if result.returncode not in (0, 1):
+    raise SystemExit(result.stderr.decode().strip() or "git check-ignore failed")
+ignored = set(result.stdout.decode().split("\0"))
+
 folder = f"{name}_{version}"
 destination = project.parent / f"{folder}.zip"
 temporary = None
@@ -29,16 +49,9 @@ try:
     with tempfile.NamedTemporaryFile(dir=project.parent, suffix=".zip", delete=False) as file:
         temporary = Path(file.name)
     with ZipFile(temporary, "w", compression=ZIP_DEFLATED, compresslevel=9) as archive:
-        for directory, subdirectories, filenames in os.walk(project):
-            subdirectories[:] = sorted(d for d in subdirectories if d != ".git")
-            for filename in sorted(filenames):
-                if filename == ".git":
-                    continue
-                source = Path(directory) / filename
-                relative = source.relative_to(project)
-                if relative == Path("prepare-release.sh"):
-                    continue
-                archive.write(source, (Path(folder) / relative).as_posix())
+        for relative in files:
+            if relative not in ignored:
+                archive.write(project / relative, f"{folder}/{relative}")
     os.replace(temporary, destination)
     print(f"Release prepared: {destination}")
 finally:

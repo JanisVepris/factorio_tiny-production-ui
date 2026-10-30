@@ -61,7 +61,7 @@ end
 function ActionButtons.new(player)
 	local first_row = dimension_buttons(player)
 	first_row[#first_row + 1] = PauseButton.new(player)
-	first_row[#first_row + 1] = AutoHideButton.new(player)
+	-- first_row[#first_row + 1] = AutoHideButton.new(player)
 	return Gui.flow({
 		name = Const.UI_ID.ACTION_BTN_CONTAINER,
 		visible = State.areActionButtonsVisible(player.index),

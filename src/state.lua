@@ -94,7 +94,8 @@ end
 
 ---@param player_index integer
 function State.isAutoHideEnabled(player_index)
-	return State.get(player_index).auto_hide == true
+	return false
+	-- return State.get(player_index).auto_hide == true
 end
 
 function State.toggleAutoHide(player_index)
@@ -296,8 +297,15 @@ end
 function State.moveSlot(player_index, source, destination)
 	local player_state = State.get(player_index)
 	local count = player_state.rows * player_state.columns
-	if source < 1 or source > count or destination < 1 or destination > count
-		or source % 1 ~= 0 or destination % 1 ~= 0 or not player_state.slots[source] then
+	if
+		source < 1
+		or source > count
+		or destination < 1
+		or destination > count
+		or source % 1 ~= 0
+		or destination % 1 ~= 0
+		or not player_state.slots[source]
+	then
 		return false
 	end
 	local source_type = State.getSlotType(player_index, source)

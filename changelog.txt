@@ -50,4 +50,9 @@ Date: 2026-10-29
 Version: 2.2.0
 Date: 2026-10-30
   Features:
-    - You can now click on slot text and then click on another slot's text to switch them, making reordering your table a bit easier
+    - You can now click on slot text and then click on another slot's text to swap them, making reordering your table a bit easier
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-10-31
+  Fixes:
+    - Fix: TPU crashing when an item set in the table no longer exists in the game (e.g. removed by a mod).

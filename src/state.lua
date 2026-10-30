@@ -82,7 +82,26 @@ function State.default(player_index)
 	return State.get(player_index)
 end
 
--- Add new defaults without replacing a player's existing selections/settings.
+local function prototypeExists(slot_type, name)
+	if slot_type == "fluid" then
+		return prototypes.fluid[name] ~= nil
+	end
+	return prototypes.item[name] ~= nil
+end
+
+-- A removed mod can leave names that no longer exist. Passing them to the GUI throws an error.
+local function forgetMissingPrototypes(player_index, player_state)
+	for slot_idx, name in pairs(player_state.slots) do
+		if not prototypeExists(State.getSlotType(player_index, slot_idx), name) then
+			player_state.slots[slot_idx] = nil
+		end
+	end
+	if player_state.planet and not prototypes.space_location[player_state.planet] then
+		player_state.planet = nil
+	end
+end
+
+-- Add new defaults and forget removed prototypes without replacing a player's other selections/settings.
 function State.migrate(player_index)
 	local player_state = State.get(player_index)
 	for key, value in pairs(defaults()) do
@@ -90,6 +109,7 @@ function State.migrate(player_index)
 			player_state[key] = value
 		end
 	end
+	forgetMissingPrototypes(player_index, player_state)
 end
 
 ---@param player_index integer
